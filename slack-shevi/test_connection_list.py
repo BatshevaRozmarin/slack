@@ -1,7 +1,5 @@
 import unittest
 from unittest.mock import MagicMock, patch
-import json
-from slack_sdk.errors import SlackApiError
 from connection_list import list_all_channels, get_channel_members, get_user_details, create_connection_list
 
 class TestSlackConnectionList(unittest.TestCase):
