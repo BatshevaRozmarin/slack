@@ -1,1 +1,22 @@
-# slack
+# Slack
+
+## Create an automatic connection list to Slack via the WEB API
+
+## How to ru this project
+
+first build the docker image
+write this command:
+
+```bash
+docker build -t  <my_image> .
+```
+
+second run this image
+write this command:
+
+```bash
+docker run  <my_image>
+```
+
+Then a list of those connected to Slack will be printed 
+to the terminal

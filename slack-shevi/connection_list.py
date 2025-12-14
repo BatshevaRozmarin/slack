@@ -77,7 +77,6 @@ def get_user_details(client, user_id):
     return None
 
 
-
 if __name__ == '__main__':
     try:
         client = get_slack_client()
