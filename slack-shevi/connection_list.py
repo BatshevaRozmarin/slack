@@ -1,8 +1,10 @@
+import json
 import os
+from dotenv import load_dotenv
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
-from dotenv import load_dotenv
-import json
+
+
 load_dotenv()
 
 def get_slack_client():
