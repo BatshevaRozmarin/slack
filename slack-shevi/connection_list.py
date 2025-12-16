@@ -70,7 +70,6 @@ def list_all_channels(client, channel_types=("public_channel", "private_channel"
     return channels
 
 
-
 def get_slack_users(client):
     users_map = {}
     next_cursor = None
