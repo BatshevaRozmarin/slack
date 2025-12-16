@@ -1,5 +1,7 @@
 import json
 import os
+import sys
+
 from dotenv import load_dotenv
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
@@ -45,15 +47,12 @@ def list_all_channels(client):
         public_channels = client.conversations_list(types="public_channel")
         if public_channels["ok"]:
             channels.extend(public_channels["channels"])
-    except SlackApiError as e:
-        print(f"Error fetching public channels: {e.response['error']}")
-
-    try:
         private_channels = client.conversations_list(types="private_channel")
         if private_channels["ok"]:
             channels.extend(private_channels["channels"])
+
     except SlackApiError as e:
-        print(f"Error fetching private channels: {e.response['error']}")
+        raise RuntimeError(f"Error fetching channels: {e.response['error']}")
         
     return channels
 
@@ -65,7 +64,7 @@ def get_channel_members(client, channel_id):
         if response["ok"]:
             member_ids.extend(response["members"])
     except SlackApiError as e:
-        print(f"Error fetching members for channel {channel_id}: {e.response['error']}")
+        raise RuntimeError(f"Error fetching members for channel {channel_id}: {e.response['error']}")
     return member_ids
 
 
@@ -75,15 +74,52 @@ def get_user_details(client, user_id):
         if response["ok"]:
             return response["user"]
     except SlackApiError as e:
-        print(f"Error fetching user details for {user_id}: {e.response['error']}")
+        raise RuntimeError(f"Error fetching user details for {user_id}: {e.response['error']}")
     return None
+
+
+def create_user(user_id, real_name=None, email=None):
+    return {
+        "id": user_id,
+        "real_name": real_name,
+        "email": email,
+    }
+
+
+def add_user(user,all_users):
+      all_users[user["id"]]=user
+
+
+def get_slack_users(client):
+    users_map = {}
+    try:
+        response = client.users_list(limit=200)
+        if response["ok"]:
+            for user in response["members"]:
+                users_map[user["id"]] = user
+
+            return users_map
+        
+    except SlackApiError as e:
+        print(f"Error connecting to Slack API: {e.response['error']}")
+        return None
 
 
 if __name__ == '__main__':
     try:
         client = get_slack_client()
         full_list = create_connection_list(client)
-        
+        if len(sys.argv) != 4:
+            print("Usage: python uploadfile.py <path_to_file>")
+        else:
+            user_id = sys.argv[1]
+            user_name = sys.argv[2]
+            user_email = sys.argv[3]
+
+            user=create_user(user_id,user_name,user_email)
+            all_users=get_slack_users(client)
+            add_user(user,all_users)
+            
         print(json.dumps(full_list, indent=4))
         
     except ValueError as e:

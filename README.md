@@ -11,8 +11,7 @@ write this command:
 docker build -t  <my_image> .
 ```
 
-second run this image
-write this command:
+then run this command:
 
 ```bash
 docker run  <my_image>
