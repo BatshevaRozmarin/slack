@@ -46,33 +46,29 @@ def member_details_list(members,all_users):
     return member_details_list 
 
 
-def list_all_channels(client,channel_types=("public_channel", "private_channel")):
+def list_all_channels(client, channel_types=("public_channel", "private_channel")):
     channels = []
-    next_cursor = None
-    types_str = ",".join(channel_types)
+    for channel_type in channel_types:
+        next_cursor = None
+        while True:
+            try:
+                response = client.conversations_list(
+                    types=channel_type,
+                    limit=200,
+                    cursor=next_cursor,
+                    exclude_archived=True
+                )
+                channels.extend(response['channels'])
 
-    while True:
-        try:
-            response = client.conversations_list(
-                types=types_str,
-                limit=200,  
-                cursor=next_cursor,
-                exclude_archived=True 
-            )
-            
-            channels.extend(response['channels'])
-            
-            if 'response_metadata' in response and 'next_cursor' in response['response_metadata']:
-                next_cursor = response['response_metadata']['next_cursor']
-                if next_cursor == "":
+                next_cursor = response.get("response_metadata", {}).get("next_cursor")
+                if not next_cursor:
                     break
-            else:
-                break
-                
-        except SlackApiError as e:
-            raise RuntimeError(f"Error fetching conversations: {e.response['error']}")
+
+            except SlackApiError as e:
+                raise RuntimeError(f"Error fetching {channel_type}: {e.response['error']}")
 
     return channels
+
 
 
 def get_slack_users(client):
@@ -102,7 +98,7 @@ def get_slack_users(client):
 def get_channel_members(client, channel_id):
     member_ids = []
     next_cursor = None
-    
+
     while True:
         try:
             response = client.conversations_members(
