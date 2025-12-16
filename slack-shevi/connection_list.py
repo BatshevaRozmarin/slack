@@ -86,10 +86,6 @@ def create_user(user_id, real_name=None, email=None):
     }
 
 
-def add_user(user,all_users):
-      all_users[user["id"]]=user
-
-
 def get_slack_users(client):
     users_map = {}
     try:
@@ -103,6 +99,10 @@ def get_slack_users(client):
     except SlackApiError as e:
         print(f"Error connecting to Slack API: {e.response['error']}")
         return None
+
+
+def add_user(user,all_users):
+      all_users[user["id"]]=user
 
 
 if __name__ == '__main__':
@@ -119,7 +119,7 @@ if __name__ == '__main__':
             user=create_user(user_id,user_name,user_email)
             all_users=get_slack_users(client)
             add_user(user,all_users)
-            
+
         print(json.dumps(full_list, indent=4))
         
     except ValueError as e:
