@@ -2,7 +2,7 @@
 
 ## Create an automatic connection list to Slack via the WEB API
 
-## How to ru this project
+## How to run this project
 
 first build the docker image
 write this command:
