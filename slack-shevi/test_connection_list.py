@@ -7,56 +7,62 @@ class TestSlackConnectionList(unittest.TestCase):
     def setUp(self):
         self.mock_client = MagicMock()
 
-    @patch('connection_list.get_slack_client')
-    def test_list_all_channels(self, mock_get_client):
-        mock_get_client.return_value = self.mock_client
-        
+    def test_list_all_channels(self):
         self.mock_client.conversations_list.side_effect = [
-            {"ok": True, "channels": [{"id": "C1", "name": "general"}]},
-            {"ok": True, "channels": [{"id": "G1", "name": "private"}]}
+            {
+                "channels": [{"id": "C1", "name": "general"}],
+                "response_metadata": {"next_cursor": "next"}
+            },
+            {
+                "channels": [{"id": "G1", "name": "private"}],
+                "response_metadata": {"next_cursor": ""}
+            }
         ]
 
         channels = list_all_channels(self.mock_client)
+
         self.assertEqual(len(channels), 2)
-        self.assertEqual(channels[0]['name'], 'general')
-        self.assertEqual(channels[1]['name'], 'private')
+        self.assertEqual(channels[0]["name"], "general")
+        self.assertEqual(channels[1]["name"], "private")
 
     def test_get_channel_members(self):
         self.mock_client.conversations_members.return_value = {
-            "ok": True,
-            "members": ["U1", "U2"]
+            "members": ["U1", "U2"],
+            "response_metadata": {"next_cursor": ""}
         }
+
         members = get_channel_members(self.mock_client, "C1")
         self.assertEqual(members, ["U1", "U2"])
-    @patch('connection_list.list_all_channels')
-    @patch('connection_list.get_channel_members')
-    @patch('connection_list.member_details_list')
-    @patch('connection_list.get_slack_users')
+
+    @patch("connection_list.list_all_channels")
+    @patch("connection_list.get_channel_members")
+    @patch("connection_list.get_slack_users")
     def test_create_connection_list(
         self,
         mock_get_slack_users,
-        mock_member_details_list,
         mock_get_channel_members,
         mock_list_channels
     ):
-        mock_list_channels.return_value = [{"id": "C1", "name": "general"}]
-        mock_get_channel_members.return_value = ["U1", "U2"]
-        mock_get_slack_users.return_value = {}
+        mock_list_channels.return_value = [
+            {"id": "C1", "name": "general"}
+        ]
 
-        mock_member_details_list.return_value = [
-            {
+        mock_get_channel_members.return_value = ["U1", "U2"]
+
+        mock_get_slack_users.return_value = {
+            "U1": {
                 "id": "U1",
                 "name": "user1",
                 "real_name": "User One",
-                "email": "user1@example.com"
+                "profile": {"email": "user1@example.com"}
             },
-            {
+            "U2": {
                 "id": "U2",
                 "name": "user2",
                 "real_name": "User Two",
-                "email": "user2@example.com"
+                "profile": {"email": "user2@example.com"}
             }
-    ]
+        }
 
         connection_list = create_connection_list(self.mock_client)
 
