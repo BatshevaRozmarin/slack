@@ -1,6 +1,11 @@
 import unittest
 from unittest.mock import MagicMock, patch
-from connection_list import list_all_channels, get_channel_members,create_connection_list
+from connection_list import (
+    list_all_channels,
+    get_channel_members,
+    create_connection_list
+)
+
 
 class TestSlackConnectionList(unittest.TestCase):
 
@@ -11,7 +16,7 @@ class TestSlackConnectionList(unittest.TestCase):
         self.mock_client.conversations_list.side_effect = [
             {
                 "channels": [{"id": "C1", "name": "general"}],
-                "response_metadata": {"next_cursor": "next"}
+                "response_metadata": {"next_cursor": ""}
             },
             {
                 "channels": [{"id": "G1", "name": "private"}],
@@ -68,9 +73,15 @@ class TestSlackConnectionList(unittest.TestCase):
 
         self.assertIn("general", connection_list)
         self.assertEqual(len(connection_list["general"]), 2)
-        self.assertEqual(connection_list["general"][0]["email"], "user1@example.com")
-        self.assertEqual(connection_list["general"][1]["email"], "user2@example.com")
+        self.assertEqual(
+            connection_list["general"][0]["email"],
+            "user1@example.com"
+        )
+        self.assertEqual(
+            connection_list["general"][1]["email"],
+            "user2@example.com"
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
