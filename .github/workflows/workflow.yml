@@ -16,12 +16,11 @@ jobs:
         run: echo "PYTHONPATH=/app" >> $GITHUB_ENV
 
       - name: 📌 Install dependencies
-        working-directory: slack-shevi
         run: |
           pip install -r requirements.txt
 
       - name: 🔨 Run tests
-        working-directory: slack-shevi
+        working-directory: test
         run: python -m unittest discover
 
       - name: 📦️ Install the code linting and formatting tool Ruff
