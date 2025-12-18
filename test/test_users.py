@@ -22,3 +22,6 @@ class TestUsers(unittest.TestCase):
         add_user_to_users(user, all_users)
         self.assertIn("U2", all_users)
         self.assertEqual(all_users["U2"]["real_name"], "Real Name")
+
+if __name__ == "__main__":
+    unittest.main()

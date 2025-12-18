@@ -55,3 +55,6 @@ class TestChannels(unittest.TestCase):
         self.assertIn("general", connection_list)
         self.assertEqual(len(connection_list["general"]), 2)
         self.assertEqual(connection_list["general"][0]["email"], "u1@example.com")
+
+if __name__ == "__main__":
+    unittest.main()

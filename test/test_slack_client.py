@@ -17,3 +17,6 @@ class TestSlackClient(unittest.TestCase):
 
         results = paginate(mock_api_call, "items")
         self.assertEqual(results, [1, 2, 3])
+
+if __name__ == "__main__":
+    unittest.main()
