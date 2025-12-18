@@ -3,15 +3,11 @@ import sys
 
 from slack_sdk.errors import SlackApiError
 
-from connection_list import (
-    add_user_to_users,
-    build_user,
-    create_connection_list,
-    get_slack_client,
-    get_slack_users,
-)
+from slack_shevi.channels import create_connection_list
+from slack_shevi.slack_client import get_slack_client
+from slack_shevi.users import (get_slack_users, build_user, add_user_to_users)
 
-
+    
 def main():
     try:
         client = get_slack_client()
@@ -21,9 +17,9 @@ def main():
             user_name = sys.argv[2]
             user_email = sys.argv[3]
 
-            user = build_user(user_id,user_name,user_email)
+            user = build_user(user_id, user_name, user_email)
             all_users = get_slack_users(client)
-            add_user_to_users(user,all_users)
+            add_user_to_users(user, all_users)
             print(all_users)
 
         print(json.dumps(full_list, indent=4))
