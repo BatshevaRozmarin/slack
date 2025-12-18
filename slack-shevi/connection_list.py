@@ -1,10 +1,7 @@
-import json
 import os
-import sys
 
 from dotenv import load_dotenv
 from slack_sdk import WebClient
-from slack_sdk.errors import SlackApiError
 
 
 load_dotenv()
@@ -100,25 +97,3 @@ def build_user(user_id, real_name=None, email=None):
 
 def add_user_to_users(user,all_users):
       all_users[user["id"]]=user
-
-
-if __name__ == '__main__':
-    try:
-        client = get_slack_client()
-        full_list = create_connection_list(client)
-        if len(sys.argv) == 4:
-            user_id = sys.argv[1]
-            user_name = sys.argv[2]
-            user_email = sys.argv[3]
-
-            user = build_user(user_id,user_name,user_email)
-            all_users = get_slack_users(client)
-            add_user_to_users(user,all_users)
-            print(all_users)
-
-        print(json.dumps(full_list, indent=4))
-        
-    except ValueError as e:
-        raise RuntimeError(e)
-    except SlackApiError as e:
-        raise RuntimeError(f"A general Slack API error occurred: {e.response['error']}")
