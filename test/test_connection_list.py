@@ -40,9 +40,9 @@ class TestSlackConnectionList(unittest.TestCase):
         members = get_channel_members(self.mock_client, "C1")
         self.assertEqual(members, ["U1", "U2"])
 
-    @patch("connection_list.list_all_channels")
-    @patch("connection_list.get_channel_members")
-    @patch("connection_list.get_slack_users")
+    @patch("slack_shevi.connection_list.list_all_channels")
+    @patch("slack_shevi.connection_list.get_channel_members")
+    @patch("slack_shevi.connection_list.get_slack_users")
     def test_create_connection_list(
         self,
         mock_get_slack_users,
