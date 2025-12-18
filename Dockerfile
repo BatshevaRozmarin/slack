@@ -7,7 +7,7 @@ ENV NODE_EXTRA_CA_CERTS=/etc/ca-bundle.crt
 ENV SSL_CERT_FILE=/etc/ca-bundle.crt
 ENV REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 
-WORKDIR /app/slack-shevi
+WORKDIR /app/slack_shevi
 
 COPY requirements.txt .
 
