@@ -1,9 +1,7 @@
-from slack_sdk import WebClient
-
 from slack_shevi.slack_client import paginate
 from slack_shevi.users import get_slack_users
 
-def create_connection_list(client: WebClient):
+def create_connection_list(client):
     all_users = get_slack_users(client)
     if not all_users:
         raise ValueError("No users found in Slack workspace.")
@@ -16,7 +14,7 @@ def create_connection_list(client: WebClient):
     }
 
 
-def list_all_channels(client: WebClient, channel_types=("public_channel", "private_channel")):
+def list_all_channels(client, channel_types=("public_channel", "private_channel")):
     channels = []
     for channel_type in channel_types:
         channels.extend(
@@ -31,7 +29,7 @@ def list_all_channels(client: WebClient, channel_types=("public_channel", "priva
     return channels
 
 
-def get_channel_members(client: WebClient, channel_id: str):
+def get_channel_members(client, channel_id: str):
     return paginate(client.conversations_members, "members", channel=channel_id, limit=200)
 
 

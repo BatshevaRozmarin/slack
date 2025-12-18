@@ -27,7 +27,7 @@ def main():
     except ValueError as e:
         raise RuntimeError(e)
     except SlackApiError as e:
-        raise RuntimeError(f"A general Slack API error occurred: {e.response['error']}")
+        raise SlackApiError(f"A general Slack API error occurred: {e.response['error']}")
     
 if __name__ == '__main__':
     main()
