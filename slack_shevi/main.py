@@ -12,7 +12,7 @@ def main():
     try:
         client = get_slack_client()
         full_list = create_connection_list(client)
-        if len(sys.argv) == 4:
+        if len(sys.argv[1:]) == 3:
             user_id = sys.argv[1]
             user_name = sys.argv[2]
             user_email = sys.argv[3]
