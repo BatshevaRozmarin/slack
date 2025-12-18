@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import MagicMock, patch
-from connection_list import (
+from slack_shevi.connection_list import (
     list_all_channels,
     get_channel_members,
     create_connection_list
