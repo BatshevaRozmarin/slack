@@ -4,7 +4,7 @@
 
 ## How to run this project
 
-first build the docker image
+- 1.first build the docker image
 write this command:
 
 ```bash
@@ -17,5 +17,13 @@ then run this command:
 docker run  <my_image>
 ```
 
-Then a list of those connected to Slack will be printed 
+Then a list of those connected to Slack will be printed
 to the terminal
+
+- 2.How insert a new client to slack:
+
+  - run the command:
+
+```bash
+docker run  <my_image> <userId> <userName> <userEmail>
+```
