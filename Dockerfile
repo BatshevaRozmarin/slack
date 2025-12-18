@@ -8,4 +8,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["python", "-m", "slack_shevi.main"]
+CMD [ "python" , "main.ts" ]
