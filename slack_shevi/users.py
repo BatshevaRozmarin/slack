@@ -1,9 +1,7 @@
-from slack_sdk import WebClient
-
 from slack_shevi.slack_client import paginate
 
 
-def get_slack_users(client: WebClient):
+def get_slack_users(client):
     users = paginate(client.users_list, "members", limit=200)
     return {user["id"]: user for user in users}
 
