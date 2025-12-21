@@ -1,0 +1,35 @@
+on:
+  push:
+    branches:
+     - feature/slack-shevi
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: ⬆️ Checkout repository
+        uses: actions/checkout@v4
+
+      - name: ➕ Set up Python
+        uses: actions/setup-python@v5
+        
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$(pwd)/slack_shevi" >> $GITHUB_ENV
+
+      - name: 📌 Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: 🔨 Run tests
+        run: python -m unittest discover -s test -v
+
+      - name: 📦️ Install the code linting and formatting tool Ruff
+        run: pipx install ruff
+
+      - name: ✏️ Lint code with Ruff
+        run: ruff check --output-format=github --target-version=py39
+
+      - name: 📝 Check code formatting with Ruff
+        run: ruff format --diff --target-version=py39
+        continue-on-error: true
